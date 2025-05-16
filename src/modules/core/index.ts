@@ -4,7 +4,7 @@ import Message from '@/message.js';
 import serifs from '@/serifs.js';
 import { safeForInterpolate } from '@/utils/safe-for-interpolate.js';
 
-const titles = ['さん', 'くん', '君', 'ちゃん', '様', '先生'];
+const titles = ['プロデューサー','P','さん', 'くん', '君', 'ちゃん', '様', '先生'];
 
 export default class extends Module {
 	public readonly name = 'core';
@@ -24,7 +24,7 @@ export default class extends Module {
 		return (
 			this.transferBegin(msg) ||
 			this.transferEnd(msg) ||
-			this.setName(msg) ||
+			// this.setName(msg) ||
 			this.modules(msg) ||
 			this.version(msg)
 		);

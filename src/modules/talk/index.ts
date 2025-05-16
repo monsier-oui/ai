@@ -23,17 +23,17 @@ export default class extends Module {
 			this.greet(msg) ||
 			this.erait(msg) ||
 			this.omedeto(msg) ||
-			this.nadenade(msg) ||
-			this.kawaii(msg) ||
-			this.suki(msg) ||
-			this.hug(msg) ||
-			this.humu(msg) ||
-			this.batou(msg) ||
-			this.itai(msg) ||
-			this.ote(msg) ||
-			this.ponkotu(msg) ||
-			this.rmrf(msg) ||
-			this.shutdown(msg)
+			// this.nadenade(msg) ||
+			// this.kawaii(msg) ||
+			// this.suki(msg) ||
+			// this.hug(msg) ||
+			// this.humu(msg) ||
+			// this.batou(msg) ||
+			// this.itai(msg) ||
+			// this.ote(msg) ||
+			// this.ponkotu(msg) ||
+			// this.rmrf(msg) ||
+			// this.shutdown(msg)
 		);
 	}
 

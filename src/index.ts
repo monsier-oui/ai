@@ -74,15 +74,15 @@ promiseRetry(retry => {
 	// 藍起動
 	new 藍(account, [
 		new CoreModule(),
-		new AiChatModule(),
+		// new AiChatModule(),
 		new ReminderModule(),
 		new TalkModule(),
 		new CheckCustomEmojisModule(),
 		new EmojiModule(),
 		new EmojiReactModule(),
-		new FortuneModule(),
-		new GuessingGameModule(),
-		new KazutoriModule(),
+		// new FortuneModule(),
+		// new GuessingGameModule(),
+		// new KazutoriModule(),
 		new ReversiModule(),
 		new TimerModule(),
 		new DiceModule(),
@@ -91,13 +91,13 @@ promiseRetry(retry => {
 		new ServerModule(),
 		new FollowModule(),
 		new BirthdayModule(),
-		new ValentineModule(),
-		new KeywordModule(),
-		new MazeModule(),
-		new ChartModule(),
+		// new ValentineModule(),
+		// new KeywordModule(),
+		// new MazeModule(),
+		// new ChartModule(),
 		new SleepReportModule(),
 		new NotingModule(),
-		new PollModule(),
+		// new PollModule(),
 	]);
 }).catch(e => {
 	log(chalk.red('Failed to fetch the account'));

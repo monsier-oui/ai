@@ -26,7 +26,9 @@ export default class Friend {
 	}
 
 	public get name() {
-		return this.doc.name;
+		// return this.doc.name;
+		// MEMO: とりあえず固定にしておく
+		return 'プロデューサーさん';
 	}
 
 	public get love() {
