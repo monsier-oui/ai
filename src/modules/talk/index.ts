@@ -22,7 +22,8 @@ export default class extends Module {
 		return (
 			this.greet(msg) ||
 			this.erait(msg) ||
-			this.omedeto(msg) ||
+			this.omedeto(msg)
+			// ||
 			// this.nadenade(msg) ||
 			// this.kawaii(msg) ||
 			// this.suki(msg) ||
