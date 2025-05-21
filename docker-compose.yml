@@ -11,7 +11,3 @@ services:
       # - './font.ttf:/ai/font.ttf:ro'
       - './data:/ai/data'
     restart: always
-networks:
-  default:
-    name: shared-misskey-network
-    external: true

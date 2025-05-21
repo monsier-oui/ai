@@ -19,6 +19,7 @@ RUN if [ $enable_mecab -ne 0 ]; then apt-get update \
 COPY . /ai
 
 WORKDIR /ai
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN npm install && npm run build || test -f ./built/index.js
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
