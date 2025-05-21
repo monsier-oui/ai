@@ -68,31 +68,31 @@ export default class extends Module {
 		}
 
 
-		if(noNotes && Math.random() < 0.04){
-			const notes = [
-				...serifs.noting.notes,
-				() => {
-					const item = genItem();
-					return serifs.noting.want(item);
-				},
-				() => {
-					const item = genItem();
-					return serifs.noting.see(item);
-				},
-				() => {
-					const item = genItem();
-					return serifs.noting.expire(item);
-				},
-			];
+		// if(noNotes && Math.random() < 0.04){
+		// 	const notes = [
+		// 		...serifs.noting.notes,
+		// 		() => {
+		// 			const item = genItem();
+		// 			return serifs.noting.want(item);
+		// 		},
+		// 		() => {
+		// 			const item = genItem();
+		// 			return serifs.noting.see(item);
+		// 		},
+		// 		() => {
+		// 			const item = genItem();
+		// 			return serifs.noting.expire(item);
+		// 		},
+		// 	];
 	
 	
-			note = notes[Math.floor(Math.random() * notes.length)];
+		// 	note = notes[Math.floor(Math.random() * notes.length)];
 	
-			// TODO: 季節に応じたセリフ
+		// 	// TODO: 季節に応じたセリフ
 	
-			this.ai.post({
-				text: typeof note === 'function' ? note() : note
-			});
+		// 	this.ai.post({
+		// 		text: typeof note === 'function' ? note() : note
+		// 	});
 		}
 	}
 }
