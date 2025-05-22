@@ -443,7 +443,7 @@ class Session {
 		if (this.allowPost) {
 			const body = {
 				i: config.i,
-				text: text,
+				text: text + ` #山村とリバーシ`,
 				visibility: 'home'
 			} as any;
 
