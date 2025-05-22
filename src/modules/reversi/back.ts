@@ -116,9 +116,9 @@ class Session {
 		}
 
 		// TLに投稿する
-		this.postGameStarted().then(note => {
-			this.startedNote = note;
-		});
+		// this.postGameStarted().then(note => {
+		// 	this.startedNote = note;
+		// });
 
 		// リバーシエンジン初期化
 		this.engine = new Reversi.Game(this.game.map, {
@@ -214,37 +214,37 @@ class Session {
 			type: 'ended'
 		});
 
-		let text: string;
+		// let text: string;
 
-		if (msg.game.surrendered) {
-			if (this.isSettai) {
-				text = serifs.reversi.settaiButYouSurrendered(this.userName);
-			} else {
-				text = serifs.reversi.youSurrendered(this.userName);
-			}
-		} else if (msg.winnerId) {
-			if (msg.winnerId == this.account.id) {
-				if (this.isSettai) {
-					text = serifs.reversi.iWonButSettai(this.userName);
-				} else {
-					text = serifs.reversi.iWon(this.userName);
-				}
-			} else {
-				if (this.isSettai) {
-					text = serifs.reversi.iLoseButSettai(this.userName);
-				} else {
-					text = serifs.reversi.iLose(this.userName);
-				}
-			}
-		} else {
-			if (this.isSettai) {
-				text = serifs.reversi.drawnSettai(this.userName);
-			} else {
-				text = serifs.reversi.drawn(this.userName);
-			}
-		}
+		// if (msg.game.surrendered) {
+		// 	if (this.isSettai) {
+		// 		text = serifs.reversi.settaiButYouSurrendered(this.userName);
+		// 	} else {
+		// 		text = serifs.reversi.youSurrendered(this.userName);
+		// 	}
+		// } else if (msg.winnerId) {
+		// 	if (msg.winnerId == this.account.id) {
+		// 		if (this.isSettai) {
+		// 			text = serifs.reversi.iWonButSettai(this.userName);
+		// 		} else {
+		// 			text = serifs.reversi.iWon(this.userName);
+		// 		}
+		// 	} else {
+		// 		if (this.isSettai) {
+		// 			text = serifs.reversi.iLoseButSettai(this.userName);
+		// 		} else {
+		// 			text = serifs.reversi.iLose(this.userName);
+		// 		}
+		// 	}
+		// } else {
+		// 	if (this.isSettai) {
+		// 		text = serifs.reversi.drawnSettai(this.userName);
+		// 	} else {
+		// 		text = serifs.reversi.drawn(this.userName);
+		// 	}
+		// }
 
-		await this.post(text, this.startedNote);
+		// await this.post(text, this.startedNote);
 
 		process.exit();
 	}
