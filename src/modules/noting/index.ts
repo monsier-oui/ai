@@ -32,7 +32,6 @@ export default class extends Module {
 	private async post() {
 		let noNotes = true;
 		
-		const now = dayjs().tz()
 		const minMorning = dayjs().tz().hour(9).minute(0).second(0);
 		const maxMorning = dayjs().tz().hour(9).minute(NOTE_SPAN).second(0);
 		const isMorning = now.isBetween(minMorning, maxMorning)

@@ -12,3 +12,7 @@ dayjs.tz.setDefault('Asia/Tokyo');
 dayjs.locale(ja);
 
 export default dayjs;
+
+export const today = dayjs().tz().startOf('date');
+
+export const now = dayjs().tz();
