@@ -1,7 +1,7 @@
 import dayjs from '@/utils/dayjs.js';
 
 export const getBirthdayIdol = async () => {
-  const today = dayjs().format('MM-DD');
+  const today = dayjs().tz().format('MM-DD');
   const queryText =
     encodeURIComponent(`PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX imas: <https://sparql.crssnky.xyz/imasrdf/URIs/imas-schema.ttl#>

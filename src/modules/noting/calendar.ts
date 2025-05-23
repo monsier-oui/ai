@@ -20,7 +20,7 @@ const calendar = google.calendar({
 });
 
 export const getGoogleCalendar = async () => {
-  const today = dayjs().startOf('date');
+  const today = dayjs().tz().startOf('date');
   const response = await calendar.events.list({
     calendarId: GOOGLE_CALENDAR_ID,
     timeMin: today.utc().format(),
@@ -64,7 +64,7 @@ export const createEventNote = async () => {
 }
 
 const getProduct = async () => {
-  const today = dayjs().startOf('date');
+  const today = dayjs().tz().startOf('date');
   const listParams: calendar_v3.Params$Resource$Events$List = {
     calendarId: GOOGLE_CALENDAR_ID_RELEASE,
     timeMin: today.subtract(1, 'month').utc().format(),

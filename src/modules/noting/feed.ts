@@ -39,7 +39,7 @@ const getFeed = async (
           (item) =>
             (item.categories?.includes('SideM') ||
               item.title?.includes('SideM')) &&
-            dayjs(item.isoDate).isAfter(dayjs().subtract(NOTE_SPAN, 'minute'))
+            dayjs(item.isoDate).isAfter(dayjs().tz().subtract(NOTE_SPAN, 'minute'))
         )
         .forEach((item) => {
           if (item.link) {

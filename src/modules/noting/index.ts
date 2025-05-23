@@ -17,7 +17,7 @@ export default class extends Module {
 	@bindThis
 	public install() {
 		if (config.notingEnabled === false) return {};
-
+		
 		setInterval(
 			() => {
 				this.post();
@@ -32,14 +32,13 @@ export default class extends Module {
 	private async post() {
 		let noNotes = true;
 		
-		const now = dayjs()
-		const minMorning = dayjs().hour(9).minute(0).second(0);
-		const maxMorning = dayjs().hour(9).minute(NOTE_SPAN).second(0);
+		const now = dayjs().tz()
+		const minMorning = dayjs().tz().hour(9).minute(0).second(0);
+		const maxMorning = dayjs().tz().hour(9).minute(NOTE_SPAN).second(0);
 		const isMorning = now.isBetween(minMorning, maxMorning)
-		const minEvening = dayjs().hour(18).minute(0).second(0)
-		const maxEvening = dayjs().hour(18).minute(NOTE_SPAN).second(0)
-		console.log(dayjs().day());
-		const isWeekendEvening = dayjs().day() === 5 && now.isBetween(minEvening,maxEvening)
+		const minEvening = dayjs().tz().hour(18).minute(0).second(0)
+		const maxEvening = dayjs().tz().hour(18).minute(NOTE_SPAN).second(0)
+		const isWeekendEvening = dayjs().tz().day() === 5 && now.isBetween(minEvening,maxEvening)
 		if(isMorning){
 			// 朝のお知らせ
 			// 誕生日
@@ -93,6 +92,6 @@ export default class extends Module {
 		// 	this.ai.post({
 		// 		text: typeof note === 'function' ? note() : note
 		// 	});
-		}
+		// }
 	}
 }
