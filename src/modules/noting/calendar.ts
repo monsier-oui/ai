@@ -3,7 +3,7 @@ import path from 'node:path';
 import process from 'node:process';
 import { google, type calendar_v3 } from 'googleapis';
 import 'dotenv/config';
-import dayjs, {today} from '@/utils/dayjs.js';
+import dayjs, { getCurrentDate } from '@/utils/dayjs.js';
 
 const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 const key = JSON.parse(await fs.readFile(path.join(process.cwd(),'service-account-key.json')));
@@ -21,6 +21,7 @@ const calendar = google.calendar({
 });
 
 export const getGoogleCalendar = async () => {
+	const today = getCurrentDate();
   const response = await calendar.events.list({
     calendarId: GOOGLE_CALENDAR_ID,
     timeMin: today.format(),
@@ -38,6 +39,7 @@ export const getGoogleCalendar = async () => {
 };
 
 export const createEventNote = async () => {
+	const today = getCurrentDate();
   let calendar = await getGoogleCalendar();
 	const productCalendar = await getProduct();
 	calendar = [
@@ -52,16 +54,18 @@ export const createEventNote = async () => {
 				}
 			})
 	]
-  if (calendar) {
-    return `プロデューサさん、本日の予定はこちらです。一緒に頑張りましょうね！\n\n` +
-      calendar
-        .map(({ hour, summary, description }) => {
-          return `${hour ? `${hour}から ` : ''}${summary}${description ? `\n${description}` : ''}`;
-        })
-        .join(`\n\n`);
-  }
+
+	return calendar.length > 0 
+		? `プロデューサさん、本日の予定はこちらです。一緒に頑張りましょうね！\n\n` +
+			calendar
+				.map(({ hour, summary, description }) => {
+					return `${hour ? `${hour}から ` : ''}${summary}${description ? `\n${description}` : ''}`;
+				})
+				.join(`\n\n`)
+		: null
 }
 const getProduct = async () => {
+	const today = getCurrentDate();
   const response = await calendar.events.list({
     calendarId: GOOGLE_CALENDAR_ID_RELEASE,
     timeMin: today.clone().subtract(1, 'month').utc().format(),

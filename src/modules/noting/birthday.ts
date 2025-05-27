@@ -1,7 +1,7 @@
-import dayjs from '@/utils/dayjs.js';
+import dayjs, { getCurrentDate } from '@/utils/dayjs.js';
 
 export const getBirthdayIdol = async () => {
-  const today = dayjs().tz().format('MM-DD');
+  const today = getCurrentDate().format('MM-DD');
   const queryText =
     encodeURIComponent(`PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX imas: <https://sparql.crssnky.xyz/imasrdf/URIs/imas-schema.ttl#>
@@ -50,7 +50,7 @@ export const getBirthdayIdol = async () => {
                 };
               }
             )
-          : false;
+          : [];
 
       const names = [];
       const urls = [];
@@ -59,7 +59,7 @@ export const getBirthdayIdol = async () => {
         urls.push(idol.url);
       }
 
-      return {
+      return names.length > 0 && {
         name: names.join('、'),
         url: urls.join(`\n`),
       };
@@ -70,10 +70,9 @@ export const getBirthdayIdol = async () => {
 };
 
 export const createBirthdayNote = async () => {
-  const birthdayIdol = await getBirthdayIdol();
-  if (birthdayIdol) {
-    const { name, url } = birthdayIdol;
+  const { name, url } = await getBirthdayIdol();
 
-    return `今日は${name}の誕生日です！ おめでとうございます！\n${url}`;
-  }
+	return name 
+		? (`今日は${name}の誕生日です！ おめでとうございます！` + url ? `\n${url}`: '') 
+		: null;
 };

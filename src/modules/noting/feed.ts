@@ -1,5 +1,5 @@
 import RssParser from 'rss-parser';
-import dayjs, {now} from '@/utils/dayjs.js'
+import dayjs, { getCurrentDateTime } from '@/utils/dayjs.js'
 import { NOTE_SPAN } from './index.js';
 
 interface Feed {
@@ -34,11 +34,13 @@ const getFeed = async (
     .parseURL(url)
     .then((result) => {
       media = result.title || '';
+			const previousTime = getCurrentDateTime().subtract(NOTE_SPAN, 'minute');
+			
       result.items
         .filter(
           (item) =>{
             return (item.categories?.includes('SideM') || item.title?.includes('SideM')) &&
-            	dayjs(item.pubDate).isAfter(now.clone().subtract(NOTE_SPAN, 'minute'))
+            	dayjs(item.pubDate).isAfter(previousTime)
         })
         .forEach((item) => {
           if (item.link) {
@@ -68,5 +70,5 @@ export const createFeedNote = async () => {
     }
   }
 
-	return contents.join("\n");
+	return contents.join("\n") || null;
 }

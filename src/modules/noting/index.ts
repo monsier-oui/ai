@@ -6,7 +6,7 @@ import config from '@/config.js';
 import { createFeedNote } from './feed.js';
 import { createBirthdayNote } from './birthday.js';
 import { createEventNote } from './calendar.js';
-import dayjs from '@/utils/dayjs.js'
+import dayjs, { getCurrentDateTime } from '@/utils/dayjs.js'
 
 // 投稿スパン
 export const NOTE_SPAN = 10;
@@ -32,12 +32,13 @@ export default class extends Module {
 	private async post() {
 		let noNotes = true;
 		
+		const currentDateTime = getCurrentDateTime();
 		const minMorning = dayjs().tz().hour(9).minute(0).second(0);
 		const maxMorning = dayjs().tz().hour(9).minute(NOTE_SPAN).second(0);
-		const isMorning = now.isBetween(minMorning, maxMorning)
+		const isMorning = currentDateTime.isBetween(minMorning, maxMorning)
 		const minEvening = dayjs().tz().hour(18).minute(0).second(0)
 		const maxEvening = dayjs().tz().hour(18).minute(NOTE_SPAN).second(0)
-		const isWeekendEvening = dayjs().tz().day() === 5 && now.isBetween(minEvening,maxEvening)
+		const isWeekendEvening = dayjs().tz().day() === 5 && currentDateTime.isBetween(minEvening,maxEvening)
 		if(isMorning){
 			// 朝のお知らせ
 			// 誕生日

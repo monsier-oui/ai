@@ -13,6 +13,10 @@ dayjs.locale(ja);
 
 export default dayjs;
 
-export const today = dayjs().tz().startOf('date');
+export const getCurrentDate = () => {
+	return dayjs().tz().startOf('date');
+}
 
-export const now = dayjs().tz();
+export const getCurrentDateTime = () => {
+	return dayjs().tz();
+}
