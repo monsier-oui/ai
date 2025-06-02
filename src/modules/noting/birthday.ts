@@ -70,9 +70,11 @@ export const getBirthdayIdol = async () => {
 };
 
 export const createBirthdayNote = async () => {
-  const { name, url } = await getBirthdayIdol();
+  const data = await getBirthdayIdol();
+	if(data){
+		const { name, url } = data
+		return `今日は${name}の誕生日です！ おめでとうございます！` + `${url&&`\n`}${url}`
+	}
 
-	return name 
-		? (`今日は${name}の誕生日です！ おめでとうございます！` + url ? `\n${url}`: '') 
-		: null;
+	return null
 };
