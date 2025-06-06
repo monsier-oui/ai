@@ -56,7 +56,7 @@ export const createEventNote = async () => {
 	]
 
 	return calendar.length > 0 
-		? `プロデューサさん、本日の予定はこちらです。一緒に頑張りましょうね！\n\n` +
+		? `プロデューサーさん、本日の予定はこちらです。一緒に頑張りましょうね！\n\n` +
 			calendar
 				.map(({ hour, summary, description }) => {
 					return `${hour ? `${hour}から ` : ''}${summary}${description ? `\n${description}` : ''}`;
