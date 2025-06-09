@@ -42,7 +42,7 @@ export default class extends Module {
 		if(isMorning){
 			// 朝のお知らせ
 			// 誕生日
-			const birthdayNote = await createBirthdayNote()
+			const birthdayNote = await createBirthdayNote(currentDateTime.format('MM-DD'))
 			if(birthdayNote){
 				this.ai.post({ text: birthdayNote });
 				noNotes = false

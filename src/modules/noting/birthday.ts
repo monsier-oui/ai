@@ -1,7 +1,6 @@
 import dayjs, { getCurrentDate } from '@/utils/dayjs.js';
 
-export const getBirthdayIdol = async () => {
-  const today = getCurrentDate().format('MM-DD');
+export const getBirthdayIdol = async (date: string) => {
   const queryText =
     encodeURIComponent(`PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX imas: <https://sparql.crssnky.xyz/imasrdf/URIs/imas-schema.ttl#>
@@ -11,7 +10,7 @@ export const getBirthdayIdol = async () => {
     WHERE { 
       ?sub schema:birthDate ?o; imas:Brand ?b; foaf:age ?a; imas:IdolListURL ?u;
       rdfs:label ?n;
-      FILTER(regex(str(?o), "${today}" ) && contains(?b, "SideM")).
+      FILTER(regex(str(?o), "${date}" ) && contains(?b, "SideM")).
     }
     group by(?n)order by(?name)`);
   const url = `https://sparql.crssnky.xyz/spql/imas/query?query=${queryText}`;
@@ -27,7 +26,7 @@ export const getBirthdayIdol = async () => {
       return response.json();
     })
     .then((data) => {
-      const result =
+      const result: {name: string; url: string}[] =
         data.results.bindings.length > 0
           ? data.results.bindings.map(
               ({
@@ -52,25 +51,27 @@ export const getBirthdayIdol = async () => {
             )
           : [];
 
-      const names = [];
-      const urls = [];
+      const names: string[] = [];
+      const urls: string[] = [];
       for (const idol of result) {
         names.push(idol.name);
         urls.push(idol.url);
       }
 
-      return names.length > 0 && {
+      return names.length > 0 ? {
         name: names.join('、'),
         url: urls.join(`\n`),
-      };
+      } : null;
     })
     .catch((error) => {
       console.error(error);
+
+			return null
     });
 };
 
-export const createBirthdayNote = async () => {
-  const data = await getBirthdayIdol();
+export const createBirthdayNote = async (date: string) => {
+  const data = await getBirthdayIdol(date);
 	if(data){
 		const { name, url } = data
 		return `今日は${name}の誕生日です！ おめでとうございます！` + `${url&&`\n`}${url}`
