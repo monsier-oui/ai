@@ -60,7 +60,7 @@ export default class extends Module {
 			noNotes = false
 		}
 		// フィードのチェック
-		const feedNote = await createFeedNote();
+		const feedNote = await createFeedNote(currentDateTime);
 		if(feedNote){
 			this.ai.post({ text: feedNote });
 			noNotes = false

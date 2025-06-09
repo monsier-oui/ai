@@ -1,6 +1,7 @@
 import RssParser from 'rss-parser';
-import dayjs, { getCurrentDateTime } from '@/utils/dayjs.js'
+import dayjs from '@/utils/dayjs.js'
 import { NOTE_SPAN } from './index.js';
+import type { Dayjs } from 'dayjs';
 
 interface Feed {
   title?: string;
@@ -26,7 +27,8 @@ const feedUrls = [
 ];
 
 const getFeed = async (
-  url: string
+  url: string,
+	currentDateTime: Dayjs
 ): Promise<{ media: string; items: Feed[] }> => {
   const items: Feed[] = [];
   let media = '';
@@ -34,7 +36,7 @@ const getFeed = async (
     .parseURL(url)
     .then((result) => {
       media = result.title || '';
-			const previousTime = getCurrentDateTime().subtract(NOTE_SPAN, 'minute');
+			const previousTime = currentDateTime.clone().subtract(NOTE_SPAN, 'minute');
 			
       result.items
         .filter(
@@ -59,10 +61,10 @@ const getFeed = async (
   return { media, items };
 };
 
-export const createFeedNote = async () => {
+export const createFeedNote = async (currentDateTime) => {
 	let contents = [];
   for (const url of feedUrls) {
-    const feed = await getFeed(url);
+    const feed = await getFeed(url, currentDateTime);
     if (feed && feed.items) {
 			for (const {title,link} of feed.items) {
 				contents.push(`${feed.media}が更新されましたよ！\n「${title}」\n${link}`);
