@@ -48,7 +48,7 @@ export default class extends Module {
 				noNotes = false
 			}
 			// 本日の予定
-			const eventNote = await createEventNote()
+			const eventNote = await createEventNote(currentDateTime)
 			if(eventNote){
 				this.ai.post({ text: eventNote });
 				noNotes = false

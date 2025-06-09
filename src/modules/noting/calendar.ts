@@ -20,8 +20,9 @@ const calendar = google.calendar({
 	auth
 });
 
-export const getGoogleCalendar = async () => {
-	const today = getCurrentDate();
+export const getGoogleCalendar = async (today) => {
+	if(!today) return null;
+
   const response = await calendar.events.list({
     calendarId: GOOGLE_CALENDAR_ID,
     timeMin: today.format(),
@@ -31,22 +32,54 @@ export const getGoogleCalendar = async () => {
     orderBy: 'startTime',
   });
   const data: calendar_v3.Schema$Events = response.data;
-	// console.log({data});
+	// console.log(data?.items);
 
   return data?.items?.length
     ? data?.items.map(formatSchedule)
     : [];
 };
 
-export const createEventNote = async () => {
-	const today = getCurrentDate();
-  let calendar = await getGoogleCalendar();
-	const productCalendar = await getProduct();
+export const createEventNote = async (today) => {
+	if(!today) return null;
+
+  let calendar = await getGoogleCalendar(today);
+	const productCalendar = await getProduct(today);
 	calendar = [
-		...calendar,
+		...calendar?.map(({summary, start, end, isSingleDay, hasTime, ...rest})=>{
+			if(hasTime){
+				return {
+					summary,
+					start,
+					...rest
+				}
+			}
+			
+				if(isSingleDay){
+					return {
+						summary,
+						...rest
+					};
+				}
+
+				let suffix = '';
+				if(start && start.isSame(today, 'day')){
+					suffix = '初日';
+				}
+				if(end && end.isSame(today, 'day')){
+					suffix = '最終日';
+				}
+
+				return suffix 
+					? {
+						summary: `${summary} ${suffix}`,
+						...rest
+					} 
+					: false;
+			})
+			.filter(v => v),
 		...productCalendar
-			.filter(({date})=>{
-				return date.isSame(today,'day')
+			.filter(({start})=>{
+				return start.isSame(today,'day')
 			}).map(({summary,...rest})=>{
 				return {
 					summary: summary + ' 発売日',
@@ -58,14 +91,13 @@ export const createEventNote = async () => {
 	return calendar.length > 0 
 		? `プロデューサーさん、本日の予定はこちらです。一緒に頑張りましょうね！\n\n` +
 			calendar
-				.map(({ hour, summary, description }) => {
-					return `${hour ? `${hour}から ` : ''}${summary}${description ? `\n${description}` : ''}`;
+				.map(({ summary, start, description }) => {
+					return `${start ? `${start.format('H:mm')}から ` : ''}${summary}${description ? `\n${description}` : ''}`;
 				})
 				.join(`\n\n`)
 		: null
 }
-const getProduct = async () => {
-	const today = getCurrentDate();
+const getProduct = async (today) => {
   const response = await calendar.events.list({
     calendarId: GOOGLE_CALENDAR_ID_RELEASE,
     timeMin: today.clone().subtract(1, 'month').utc().format(),
@@ -81,13 +113,20 @@ const getProduct = async () => {
 		: [];
 };
 
-const formatSchedule = ({ start, summary, description }: calendar_v3.Schema$Event) => {
+const formatSchedule = ({ start: _start, end: _end, summary, description }: calendar_v3.Schema$Event) => {
+	const start = _start?.date ? dayjs(_start.date).tz() : dayjs(_start.dateTime).tz(_start.timeZone);
+	const end = _end?.date ? dayjs(_end.date).tz() : dayjs(_end.dateTime).tz(_end.timeZone);
+	const isSingleDay = _end?.date && end.diff(start, 'day') === 1 || false;
+	const hasTime = _start?.dateTime !== undefined || false;
+	
 	return {
 		summary,
-		date: start?.dateTime ? dayjs(start.dateTime).tz(start.timeZone) : dayjs(start?.date).tz(),
-		hour: start?.dateTime ? `${dayjs(start?.dateTime).tz().format('H:mm')}` : null,
+		start,
+		end,
+		hasTime,
+		isSingleDay,
 		description: description
-			? description.replace(/(<([^>]+)>)/gi, '')
+			? description.replace('<br>',"\n").replace(/(<([^>]+)>)/gi, '')
 			: '',
 	};
 }
