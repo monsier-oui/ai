@@ -10,8 +10,7 @@ const key = JSON.parse(await fs.readFile(path.join(process.cwd(),'service-accoun
 const GOOGLE_PRIVATE_KEY = key.private_key;
 const GOOGLE_CLIENT_EMAIL = key.client_email;
 const GOOGLE_PROJECT_NUMBER = key.project_id;
-const GOOGLE_CALENDAR_ID = '315.yamamura.bot@gmail.com';
-const GOOGLE_CALENDAR_ID_RELEASE = '39f3cad4fd58a0f9cae1b2df295572eb2af83987e6a70bc0b1394bfd692e66ae@group.calendar.google.com';
+const {GOOGLE_CALENDAR_ID_DEFAULT,GOOGLE_CALENDAR_ID_RELEASE} = process.env;
 
 const auth = new google.auth.JWT(GOOGLE_CLIENT_EMAIL,null,GOOGLE_PRIVATE_KEY,SCOPES);
 const calendar = google.calendar({
@@ -24,7 +23,7 @@ export const getGoogleCalendar = async (today) => {
 	if(!today) return null;
 
   const response = await calendar.events.list({
-    calendarId: GOOGLE_CALENDAR_ID,
+    calendarId: GOOGLE_CALENDAR_ID_DEFAULT,
     timeMin: today.format(),
     timeMax: today.clone().endOf('date').format(),
     maxResults: 10,
