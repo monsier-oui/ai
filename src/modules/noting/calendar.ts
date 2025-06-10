@@ -22,10 +22,12 @@ const calendar = google.calendar({
 export const getGoogleCalendar = async (today) => {
 	if(!today) return null;
 
+	const timeMin = today.clone().subtract(1, 'second').format();
+	const timeMax = today.clone().add(1, 'day').add(1, 'second').format();
   const response = await calendar.events.list({
     calendarId: GOOGLE_CALENDAR_ID_DEFAULT,
-    timeMin: today.format(),
-    timeMax: today.clone().endOf('date').format(),
+    timeMin,
+    timeMax,
     maxResults: 10,
     singleEvents: true,
     orderBy: 'startTime',
@@ -44,20 +46,20 @@ export const createEventNote = async (today) => {
   let calendar = await getGoogleCalendar(today);
 	const productCalendar = await getProduct(today);
 	calendar = [
-		...calendar?.map(({summary, start, end, isSingleDay, hasTime, ...rest})=>{
-			if(hasTime){
-				return {
-					summary,
-					start,
-					...rest
-				}
-			}
-			
+		...calendar?.map(({summary, start, end, isAllDay, isSingleDay, ...rest})=>{
 				if(isSingleDay){
+					if(isAllDay){
+						return {
+							summary,
+							...rest
+						};
+					}
+				
 					return {
 						summary,
+						start,
 						...rest
-					};
+					}
 				}
 
 				let suffix = '';
@@ -79,10 +81,10 @@ export const createEventNote = async (today) => {
 		...productCalendar
 			.filter(({start})=>{
 				return start.isSame(today,'day')
-			}).map(({summary,...rest})=>{
+			}).map(({summary,description})=>{
 				return {
 					summary: summary + ' 発売日',
-					...rest
+					description
 				}
 			})
 	]
@@ -113,16 +115,16 @@ const getProduct = async (today) => {
 };
 
 const formatSchedule = ({ start: _start, end: _end, summary, description }: calendar_v3.Schema$Event) => {
-	const start = _start?.date ? dayjs(_start.date).tz() : dayjs(_start.dateTime).tz(_start.timeZone);
-	const end = _end?.date ? dayjs(_end.date).tz() : dayjs(_end.dateTime).tz(_end.timeZone);
-	const isSingleDay = _end?.date && end.diff(start, 'day') === 1 || false;
-	const hasTime = _start?.dateTime !== undefined || false;
+	const start = _start?.dateTime ? dayjs(_start.dateTime).tz(_start.timeZone) : dayjs(_start.date).tz();
+	const end = _end?.dateTime ? dayjs(_end.dateTime).tz(_end.timeZone) : dayjs(_end.date).tz().subtract(1, 'day');
+	const isAllDay = _end?.date !== undefined;
+	const isSingleDay = end.diff(start, 'day') === 0 || false;
 	
 	return {
 		summary,
 		start,
 		end,
-		hasTime,
+		isAllDay,
 		isSingleDay,
 		description: description
 			? description.replace('<br>',"\n").replace(/(<([^>]+)>)/gi, '')
