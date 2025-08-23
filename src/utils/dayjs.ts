@@ -1,3 +1,4 @@
+import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween.js';
 import timezone from 'dayjs/plugin/timezone.js';
@@ -12,6 +13,8 @@ dayjs.tz.setDefault('Asia/Tokyo');
 dayjs.locale(ja);
 
 export default dayjs;
+
+export type { Dayjs };
 
 export const getCurrentDate = () => {
 	return dayjs().tz().startOf('date');
