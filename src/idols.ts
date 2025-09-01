@@ -396,7 +396,7 @@ export class Idol {
 	}
 
 	isBirthday(today: Dayjs): boolean {
-		return today.isSame(this.birthday.date);
+		return today.isSame(this.birthday.date, 'date');
 	}
 
 	getNameWithTitle(): string {
