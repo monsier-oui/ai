@@ -36,6 +36,9 @@ export default class extends Module {
 		const minMorning = dayjs().tz().hour(9).minute(0).second(0);
 		const maxMorning = dayjs().tz().hour(9).minute(NOTE_SPAN).second(0);
 		const isMorning = currentDateTime.isBetween(minMorning, maxMorning)
+		const minNight = dayjs().tz().hour(21).minute(0).second(0);
+		const maxNight = dayjs().tz().hour(21).minute(NOTE_SPAN).second(0);
+		const isNight = currentDateTime.isBetween(minMorning, maxMorning)
 		const minEvening = dayjs().tz().hour(18).minute(0).second(0)
 		const maxEvening = dayjs().tz().hour(18).minute(NOTE_SPAN).second(0)
 		const isWeekendEvening = dayjs().tz().day() === 5 && currentDateTime.isBetween(minEvening,maxEvening)
@@ -50,7 +53,15 @@ export default class extends Module {
 			// 本日の予定
 			const eventNote = await createEventNote(currentDateTime)
 			if(eventNote){
-				this.ai.post({ text: eventNote });
+				this.ai.post({ text: `プロデューサーさん、本日の予定はこちらです。一緒に頑張りましょうね！\n\n` + eventNote });
+				noNotes = false
+			}
+		}else if(isNight){
+			// 夜のメモ
+			const tomorrow = currentDateTime.clone().add(1, 'day');
+			const eventNote = await createEventNote(tomorrow);
+			if(eventNote){
+				this.ai.post({ text: `山村からのメモが残されている…\n\n『プロデューサーさん、明日の予定はこちらです。無理せず頑張りましょうね！』\n\n` + eventNote });
 				noNotes = false
 			}
 		}else if(isWeekendEvening){
