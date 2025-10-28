@@ -38,7 +38,7 @@ export default class extends Module {
 		const isMorning = currentDateTime.isBetween(minMorning, maxMorning)
 		const minNight = dayjs().tz().hour(21).minute(0).second(0);
 		const maxNight = dayjs().tz().hour(21).minute(NOTE_SPAN).second(0);
-		const isNight = currentDateTime.isBetween(minMorning, maxMorning)
+		const isNight = currentDateTime.isBetween(minNight, maxNight)
 		const minEvening = dayjs().tz().hour(18).minute(0).second(0)
 		const maxEvening = dayjs().tz().hour(18).minute(NOTE_SPAN).second(0)
 		const isWeekendEvening = dayjs().tz().day() === 5 && currentDateTime.isBetween(minEvening,maxEvening)
