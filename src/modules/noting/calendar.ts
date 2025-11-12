@@ -22,8 +22,8 @@ const calendar = google.calendar({
 export const getGoogleCalendar = async (today) => {
 	if(!today) return null;
 
-	const timeMin = today.clone().subtract(1, 'second').format();
-	const timeMax = today.clone().add(1, 'day').add(1, 'second').format();
+	const timeMin = today.clone().startOf('date').format();
+	const timeMax = today.clone().endOf('date').format();
   const response = await calendar.events.list({
     calendarId: GOOGLE_CALENDAR_ID_DEFAULT,
     timeMin,
