@@ -28,7 +28,6 @@ export const getGoogleCalendar = async (today) => {
     calendarId: GOOGLE_CALENDAR_ID_DEFAULT,
     timeMin,
     timeMax,
-    maxResults: 10,
     singleEvents: true,
     orderBy: 'startTime',
   });
