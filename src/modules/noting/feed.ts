@@ -23,7 +23,7 @@ const parser: RssParser<YouTubeItem> = new RssParser({
 
 const feedUrls = [
 	'https://www.youtube.com/feeds/videos.xml?channel_id=UCe3uJZIjfYwNNR0S6W3GvEA',
-	'https://www.youtube.com/feeds/videos.xml?user=Lantis',
+	'https://www.youtube.com/feeds/videos.xml?channel_id=UCpRh2xmGtaVhFVuyCB271pw',
 ];
 
 const getFeed = async (
