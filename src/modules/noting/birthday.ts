@@ -21,6 +21,7 @@ export const getBirthdayData = (today: Dayjs) => {
 
 export const createBirthdayNote = (today) => {
 	const birthdayData = getBirthdayData(today);
+	let note = '';
 	
 	if(birthdayData){
 		const {idols,next,nextBirthday} = birthdayData;
@@ -29,9 +30,14 @@ export const createBirthdayNote = (today) => {
 		
 		const nextNames = next.map((idol)=>idol.getNameWithTitle()).join('、');
 
-		return `今日は${names}の誕生日です！ おめでとうございます！\n`
-		+`次のお誕生日は${nextNames}（${nextBirthday}）で、あと${next[0].birthday.daysUntil}日です。\n` + `${urls}`;
+		note += `今日は${names}の誕生日です！ おめでとうございます！`
+
+		if(next[0].birthday.daysUntil > 0){
+			note += `\n次のお誕生日は${nextNames}（${nextBirthday}）で、あと${next[0].birthday.daysUntil}日です。`;
+		}
+
+		note += `\n${urls}`;
 	}
 
-	return null;
+	return note;
 };
