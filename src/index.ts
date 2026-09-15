@@ -54,6 +54,13 @@ process.on('uncaughtException', err => {
 	} catch { }
 });
 
+process.on('unhandledRejection', reason => {
+	try {
+		console.error('Unhandled rejection:');
+		console.dir(reason, { colors: true, depth: 2 });
+	} catch { }
+});
+
 promiseRetry(retry => {
 	log(`Account fetching... ${chalk.gray(config.host)}`);
 

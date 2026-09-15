@@ -55,7 +55,7 @@ const getFeed = async (
         });
     })
     .catch((error) => {
-      console.error('RSS取得失敗: ', error);
+      console.error(`RSS取得失敗: ${url}`, error);
     });
 
   return { media, items };

@@ -20,13 +20,22 @@ export default class extends Module {
 		
 		setInterval(
 			() => {
-				this.post();
+				this.post().catch((error) => {
+					console.error('noting: 定期処理でエラーが発生しました', error);
+				});
 			}, 
 			1000 * 60 * NOTE_SPAN
 		);
 
 		return {};
 	}	
+
+	@bindThis
+	private postSafely(text: string) {
+		this.ai.post({ text }).catch((error) => {
+			console.error('noting: 投稿に失敗しました', error);
+		});
+	}
 
 	@bindThis
 	private async post() {
@@ -47,13 +56,13 @@ export default class extends Module {
 			// 誕生日
 			const birthdayNote = await createBirthdayNote(currentDateTime.startOf('date'))
 			if(birthdayNote){
-				this.ai.post({ text: birthdayNote });
+				this.postSafely(birthdayNote);
 				noNotes = false
 			}
 			// 本日の予定
 			const eventNote = await createEventNote(currentDateTime)
 			if(eventNote){
-				this.ai.post({ text: `プロデューサーさん、本日の予定はこちらです。一緒に頑張りましょうね！\n\n` + eventNote });
+				this.postSafely(`プロデューサーさん、本日の予定はこちらです。一緒に頑張りましょうね！\n\n` + eventNote);
 				noNotes = false
 			}
 		}else if(isNight){
@@ -61,19 +70,19 @@ export default class extends Module {
 			const tomorrow = currentDateTime.clone().add(1, 'day');
 			const eventNote = await createEventNote(tomorrow);
 			if(eventNote){
-				this.ai.post({ text: `山村からのメモが残されている…\n\n『プロデューサーさん、明日の予定はこちらです。無理せず頑張りましょうね！』\n\n` + eventNote });
+				this.postSafely(`山村からのメモが残されている…\n\n『プロデューサーさん、明日の予定はこちらです。無理せず頑張りましょうね！』\n\n` + eventNote);
 				noNotes = false
 			}
 		}else if(isWeekendEvening){
 			// 週末のあいさつ
 			// TODO: 季節によって変わるとうれしい
-			this.ai.post({ text: 'プロデューサーさん、今週もお疲れさまでした！' });
+			this.postSafely('プロデューサーさん、今週もお疲れさまでした！');
 			noNotes = false
 		}
 		// フィードのチェック
 		const feedNote = await createFeedNote(currentDateTime);
 		if(feedNote){
-			this.ai.post({ text: feedNote });
+			this.postSafely(feedNote);
 			noNotes = false
 		}
 
